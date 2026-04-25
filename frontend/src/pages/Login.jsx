@@ -48,7 +48,7 @@ export default function Login({ onLogin }) {
         <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
 
           <div className="px-8 py-6 text-center" style={{ backgroundColor: '#ffffff', borderBottom: '1px solid #e8f5e9' }}>
-            <img src="/logo-sce.png" alt="SCE" className="h-16 mx-auto" />
+            <img src="/logo-sce.png" alt="SCE" className="h-28 mx-auto" />
           </div>
 
           <form onSubmit={handleSubmit} className="px-8 py-8 flex flex-col gap-5">
