@@ -49,7 +49,6 @@ export default function Login({ onLogin }) {
 
           <div className="px-8 py-6 text-center" style={{ backgroundColor: '#ffffff', borderBottom: '1px solid #e8f5e9' }}>
             <img src="/logo-sce.png" alt="SCE" className="h-16 mx-auto" />
-            <p className="text-xs mt-2 font-medium tracking-wide" style={{ color: '#0A7A2A' }}>Sistema de Control Ethos Corp</p>
           </div>
 
           <form onSubmit={handleSubmit} className="px-8 py-8 flex flex-col gap-5">
