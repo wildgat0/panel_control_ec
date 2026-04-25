@@ -1,0 +1,42 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      - POSTGRES_DB=panel_control
+      - POSTGRES_USER=panel_user
+      - POSTGRES_PASSWORD=panel_pass
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - panel-network
+
+  backend:
+    build: ./backend
+    restart: unless-stopped
+    depends_on:
+      - postgres
+    environment:
+      - JWT_SECRET=cambiar_por_un_secreto_seguro
+      - DATABASE_URL=postgresql://panel_user:panel_pass@postgres:5432/panel_control
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - panel-network
+
+  frontend:
+    build: ./frontend
+    restart: unless-stopped
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+    networks:
+      - panel-network
+
+volumes:
+  postgres_data:
+
+networks:
+  panel-network:
+    driver: bridge
