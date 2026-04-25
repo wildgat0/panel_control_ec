@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { UserPlus, Pencil, Trash2, ShieldCheck, User, ToggleLeft, ToggleRight } from 'lucide-react'
 import { apiFetch } from '../api.js'
 import UserModal from '../components/UserModal.jsx'
+import ConfirmModal from '../components/ConfirmModal.jsx'
 
 function Initials({ nombre }) {
   const letters = nombre.split(' ').map(w => w[0]).slice(0, 2).join('').toUpperCase()
@@ -16,7 +17,8 @@ function Initials({ nombre }) {
 export default function Usuarios() {
   const [usuarios, setUsuarios]   = useState([])
   const [loading, setLoading]     = useState(true)
-  const [modal, setModal]         = useState(null) // null | 'nuevo' | usuario
+  const [modal, setModal]         = useState(null)   // null | 'nuevo' | usuario
+  const [confirmar, setConfirmar] = useState(null)   // null | usuario
 
   async function fetchUsuarios() {
     try {
@@ -29,9 +31,9 @@ export default function Usuarios() {
 
   useEffect(() => { fetchUsuarios() }, [])
 
-  async function handleEliminar(id) {
-    if (!confirm('¿Eliminar este usuario?')) return
-    await apiFetch(`/api/users/${id}`, { method: 'DELETE' })
+  async function handleEliminar() {
+    await apiFetch(`/api/users/${confirmar.id}`, { method: 'DELETE' })
+    setConfirmar(null)
     await fetchUsuarios()
   }
 
@@ -115,7 +117,7 @@ export default function Usuarios() {
                     <Pencil size={13} />
                   </button>
 
-                  <button onClick={() => handleEliminar(u.id)} title="Eliminar"
+                  <button onClick={() => setConfirmar(u)} title="Eliminar"
                     className="p-1.5 rounded-lg transition-all"
                     style={{ color: '#F87171', border: '1px solid transparent' }}
                     onMouseEnter={(e) => { e.currentTarget.style.borderColor = 'rgba(239,68,68,0.25)'; e.currentTarget.style.backgroundColor = 'rgba(239,68,68,0.08)' }}
@@ -134,6 +136,16 @@ export default function Usuarios() {
           usuario={modal === 'nuevo' ? null : modal}
           onClose={() => setModal(null)}
           onSaved={fetchUsuarios}
+        />
+      )}
+
+      {confirmar && (
+        <ConfirmModal
+          title="Eliminar usuario"
+          message={`¿Estás seguro de que deseas eliminar a ${confirmar.nombre}? Esta acción no se puede deshacer.`}
+          confirmLabel="Eliminar"
+          onConfirm={handleEliminar}
+          onCancel={() => setConfirmar(null)}
         />
       )}
     </>
