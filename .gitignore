@@ -1,0 +1,5 @@
+node_modules/
+.claude/
+deploy.py
+*.env
+.env*
