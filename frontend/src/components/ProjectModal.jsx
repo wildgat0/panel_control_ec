@@ -28,7 +28,7 @@ export default function ProjectModal({ project, containers, onClose, onAction })
         </div>
 
         <div className="overflow-y-auto p-5">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="flex flex-col gap-2">
             {containers.map(c => (
               <ContainerCard key={c.id} container={c} onAction={onAction} />
             ))}
